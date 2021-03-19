@@ -1,15 +1,19 @@
+from bs4 import NavigableString
 from web_scrapping import get_href_to_list
 import pandas as pd
 
 url = 'https://github.com/getmanfred/offers/wiki'
 text_list, href_list = get_href_to_list(url)
-element_list = []
+
+job_list = []
 for element in text_list:
-    if ('€' or '$') and ('para' or 'en') in element:
-        element_list.append(element)
+    if isinstance(element, NavigableString) and '(' in element:
+        job_list.append(element)
 
-print(len(element_list))
+df = pd.DataFrame(job_list, columns=['ManfredName'])
 
-
-
-
+df['Split'] = df['ManfredName'].str.split('(', 1)
+df['Job'] = df['Split'].str[0]
+df['Split2'] = df['Split'].str[1].str.split(')', 1)
+df['Salary'] = df['Split2'].str[0]
+df['RestInfo'] = df['Split2'].str[1]
