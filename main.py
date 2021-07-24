@@ -1,4 +1,6 @@
 from bs4 import NavigableString
+
+from extract_from_string import extract_number_list_from_spaced_string
 from web_scrapping import get_href_to_list
 import pandas as pd
 
@@ -12,8 +14,8 @@ for element in text_list:
 
 df = pd.DataFrame(job_list, columns=['ManfredName'])
 
-df['Split'] = df['ManfredName'].str.split('(', 1)
-df['Job'] = df['Split'].str[0]
-df['Split2'] = df['Split'].str[1].str.split(')', 1)
-df['Salary'] = df['Split2'].str[0]
-df['RestInfo'] = df['Split2'].str[1]
+df['Salary'] = df.apply(lambda row: extract_number_list_from_spaced_string(row['ManfredName']), axis=1)
+
+
+
+
