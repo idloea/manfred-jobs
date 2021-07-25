@@ -10,6 +10,6 @@ def extract_currency_from_spaced_string(spaced_string: str) -> str:
     pattern = r'[$€£]'
     currency_list = [string for string in re.findall(pattern, spaced_string)]
     if not currency_list:
-        return '€'
+        return '€'  # As Manfred is located in Spain, the assumption is to consider offers without currency in €
     else:
         return currency_list[0]
